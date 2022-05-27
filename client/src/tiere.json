@@ -1,0 +1,46 @@
+[
+    {
+        "name": "Meerschweinchen",
+        "img": "svin.png"
+    },
+    {
+        "name": "Schaf",
+        "img": "sharf.png"
+    },
+    {
+        "name": "Hahn",
+        "img": "hahn.png"
+    },
+
+    {
+        "name": "Katze",
+        "img": "cat.png"
+    },
+    {
+        "name": "Ziege",
+        "img": "ziege3.png"
+    },
+
+    {
+        "name": "Pferd",
+        "img": "horse.png"
+    },
+    {
+        "name": "Kue",
+        "img": "kue.png"
+    },
+    {
+        "name": "Schwein",
+        "img": "pig.png"
+    },
+
+    {
+        "name": "Hund",
+        "img": "dog.png"
+    },
+
+    {
+        "name": "Maus",
+        "img": "mause.png"
+    }
+]
