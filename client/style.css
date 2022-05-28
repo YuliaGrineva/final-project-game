@@ -203,3 +203,7 @@ grid-row: 1 / 2;
     max-width: 800px;
     margin: 0 auto;
 }
+
+#onboard img {
+    height: 50px;
+}

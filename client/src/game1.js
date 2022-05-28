@@ -1,44 +1,47 @@
-import animals from "./tiere.json";
+import animalsJson from "./tiere.json";
 import { useState, useEffect } from "react";
-
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Game1() {
+    const [animals, setAnimals] = useState(animalsJson);
     console.log(animals);
+    //const [onboard, setOnboard] = useState([]);
 
-    const [animal, setAnimals] = useState([]);
-    const [onboard, setOnboard] = useState([]);
+    // const said = useSelector(state =>
+    //     state.said && state.said);
 
-    // const SpeechRecognition =
-    //     window.SpeechRecognition || webkitSpeechRecognition;
+    const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
     const SpeechGrammarList =
         window.SpeechGrammarList || webkitSpeechGrammarList;
     // const SpeechRecognitionEvent =
     //     window.SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 
-    var recognizer = new webkitSpeechRecognition();
+    let recognizer = new SpeechRecognition();
+    let speechRecognitionList = new SpeechGrammarList();
+    const tiere = [
+        "Meerschweinchen",
+        "Schaf",
+        "Hahn",
+        "Katze",
+        "Ziege",
+        "Pferd",
+        "Kuh",
+        "Schwein",
+        "Hund",
+        "Maus",
+    ];
+    const grammar =
+        "#JSGF V1.0; grammar tiere; public <tiere> = ' + tiere.join(' | ') + ';";
+
+    speechRecognitionList.addFromString(grammar, 1);
+
     recognizer.interimResults = false;
     recognizer.maxAlternatives = 1;
     recognizer.lang = "de-De";
 
-    var grammar =
-        "#JSGF V1.0; grammar animals; public <animal> = Bär | Ente | Esel | Hund | Kaninchen | Katze | Kuh | Pferd | Schaf | Schildkröte | Schwein | Ziege ;";
-    var speechRecognitionList = new SpeechGrammarList();
-    speechRecognitionList.addFromString(grammar, 1);
     recognizer.grammars = speechRecognitionList;
 
-    // recognizer.onresult = function (event) {
-    //     var result = event.results[event.resultIndex];
-    //     if (result.isFinal) {
-    //         alert("Вы сказали: " + result[0].transcript);
-    //     } else {
-    //         console.log("Промежуточный результат: ", result[0].transcript);
-    //     }
-    // };
-    // а если нажать на животное, то тебе скажут его имя.
-
-    // SpeechRecognition.onstart (en-US) надо эту функцию, чтобы комп показал, что он слушает ребенка
-
-    // Привязать это действие к нажатию кнопки на тракторе
     document.body.onclick = function () {
         recognizer.start();
         console.log("Ready to receive a command.");
@@ -46,26 +49,59 @@ export default function Game1() {
 
     recognizer.onresult = function (event) {
         const result = event.results[0][0].transcript;
-        alert(result);
-        return result;
+        let erraten = false;
+        console.log("richtig erraten", result);
+        for (let i = 0; i < tiere.length; i++) {
+            if (result === tiere[i]) {
+                erraten = true;
+                animals.map((animal) => {
+                    if (animal.name === tiere[i]) {
+                        animal.onboard = true;
+                        console.log("NEW", animals);
+
+                        setAnimals(animals);
+                    }
+                });
+            }
+
+            return;
+        }
+
+        if (!erraten) {
+            console.log("probiere es noch einmal!");
+        }
+        setAnimals(animals);
+        return animals;
     };
+    console.log("!!!", animals);
 
-    // if result === tiere.json.name { setOnboard(onboard=result))}
-        
+    const offboardedAnimals = animals.filter((animal) => {
+        if (animal.onboard === false) {
+            return true;
+        } else {
+            return false;
+        }
+    });
 
-    // вставить картинку, что процесс идет
-
-    // function talk(){
-    //     SpeechSynthesis.speak( new SpeechSynthesisUtterance(`Hund`));
-    // }
-
+    const onboardedAnimals = animals.filter((animal) => {
+        if (animal.onboard === true) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    console.log("obboard", onboardedAnimals);
     return (
         <>
             <section id="pageGame1">
-                <div id="onboard">onboard</div>
+                <div id="onboard">
+                    {onboardedAnimals.map((animal) => (
+                        <img key={animal.name} src={animal.img} />
+                    ))}
+                </div>
                 <div id="nav">
                     <p>Call all the animals in German</p>
-                    <button id="recognize">Start</button>
+                    {/* <p>Microphone: {listening ? "on" : "off"}</p> */}
                     <input id="interim" placeholder="Прогресс распознавания" />
                     <textarea
                         id="message"
@@ -77,7 +113,10 @@ export default function Game1() {
                 </div>
                 <div id="animals">
                     <div className="animalsWrapper">
-                        <img src="svin.png" />
+                        {offboardedAnimals.map((animal) => (
+                            <img key={animal.name} src={animal.img} />
+                        ))}
+                        {/* <img src="svin.png" />
                         <img src="sharf.png" />
                         <img src="hahn.png" />
                         <img src="cat.png" />
@@ -86,7 +125,7 @@ export default function Game1() {
                         <img src="kue.png" />
                         <img src="pig.png" />
                         <img src="dog.png" />
-                        <img src="mause.png" />
+                        <img src="mause.png" /> */}
                     </div>
                 </div>
             </section>
@@ -107,3 +146,17 @@ export default function Game1() {
         </>
     );
 }
+
+// recognizer.onresult = function (event) {
+//     var result = event.results[event.resultIndex];
+//     if (result.isFinal) {
+//         alert("Вы сказали: " + result[0].transcript);
+//     } else {
+//         console.log("Промежуточный результат: ", result[0].transcript);
+//     }
+// };
+// а если нажать на животное, то тебе скажут его имя.
+
+// SpeechRecognition.onstart (en-US) надо эту функцию, чтобы комп показал, что он слушает ребенка
+
+// Привязать это действие к нажатию кнопки на тракторе
