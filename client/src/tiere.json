@@ -10,7 +10,7 @@
         "onboard": false
     },
     {
-        "name": "Hahn",
+        "name": "Huhn",
         "img": "hahn.png",
         "onboard": false
     },
@@ -39,7 +39,7 @@
     {
         "name": "Schwein",
         "img": "pig.png",
-        "onboard": true
+        "onboard": false
     },
 
     {
@@ -51,6 +51,6 @@
     {
         "name": "Maus",
         "img": "mause.png",
-        "onboard": true
+        "onboard": false
     }
 ]

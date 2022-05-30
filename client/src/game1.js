@@ -4,8 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Game1() {
     const [animals, setAnimals] = useState(animalsJson);
+    const [onboard, setOnboard] = useState();
+    const [microfoneShown, setMicrofoneShown] = useState(false);
+    const [lastWord, setLastWord] = useState();
+    const [rulesShown, setRulesShown] = useState(false);
+    const [guessed, setGuessed] = useState();
+    const [error, setError] = useState();
+
     console.log(animals);
-    //const [onboard, setOnboard] = useState([]);
 
     // const said = useSelector(state =>
     //     state.said && state.said);
@@ -17,12 +23,16 @@ export default function Game1() {
     // const SpeechRecognitionEvent =
     //     window.SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 
+    useEffect(() => {
+        console.log("UseEffect runs ");
+    }, [onboard]);
+
     let recognizer = new SpeechRecognition();
     let speechRecognitionList = new SpeechGrammarList();
     const tiere = [
         "Meerschweinchen",
         "Schaf",
-        "Hahn",
+        "Huhn",
         "Katze",
         "Ziege",
         "Pferd",
@@ -42,38 +52,61 @@ export default function Game1() {
 
     recognizer.grammars = speechRecognitionList;
 
-    document.body.onclick = function () {
+    function onClickAllListen() {
+        setMicrofoneShown(true);
+        console.log("Button clicked biatch");
         recognizer.start();
-        console.log("Ready to receive a command.");
-    };
+    }
+
+    function onClickRules() {
+        setRulesShown(true);
+    }
+
+    function clickOnX() {
+        setRulesShown(false);
+        console.log("Click on X");
+    }
 
     recognizer.onresult = function (event) {
+        setMicrofoneShown(false);
+        // const interim = event.result[0].transcript;
+        // console.log("Промежуточный результат: ", interim);
         const result = event.results[0][0].transcript;
         let erraten = false;
         console.log("richtig erraten", result);
+        setLastWord(result);
+
         for (let i = 0; i < tiere.length; i++) {
             if (result === tiere[i]) {
                 erraten = true;
+                setGuessed(true);
                 animals.map((animal) => {
                     if (animal.name === tiere[i]) {
                         animal.onboard = true;
+                        onboardedAnimals.push(animal);
+                        setOnboard(animal);
+                        console.log("NEW onboarded", onboardedAnimals);
                         console.log("NEW", animals);
 
                         setAnimals(animals);
                     }
                 });
             }
-
-            return;
         }
 
         if (!erraten) {
             console.log("probiere es noch einmal!");
+            setGuessed(false);
+            setError(true);
         }
-        setAnimals(animals);
+
         return animals;
     };
     console.log("!!!", animals);
+
+    function hideMic() {
+        setMicrofoneShown(false);
+    }
 
     const offboardedAnimals = animals.filter((animal) => {
         if (animal.onboard === false) {
@@ -91,41 +124,80 @@ export default function Game1() {
         }
     });
     console.log("obboard", onboardedAnimals);
+
     return (
         <>
             <section id="pageGame1">
                 <div id="onboard">
-                    {onboardedAnimals.map((animal) => (
-                        <img key={animal.name} src={animal.img} />
-                    ))}
+                    {!microfoneShown && (
+                        <img
+                            onClick={onClickAllListen}
+                            className="playButton"
+                            src="go.png"
+                        />
+                    )}
+                    {microfoneShown && (
+                        <div>
+                            <img className="listen" src="mic2.png" />
+                            <button onClick={hideMic}>HIDE MIC</button>
+                        </div>
+                    )}
+
+                    <div id="onTheTractor">
+                        {onboardedAnimals.map((animal) => (
+                            <img
+                                id="onboardAnimals"
+                                key={animal.name}
+                                src={animal.img}
+                            />
+                        ))}
+                    </div>
+                    <img className="tracktor" src="tracktor.png" />
                 </div>
                 <div id="nav">
-                    <p>Call all the animals in German</p>
-                    {/* <p>Microphone: {listening ? "on" : "off"}</p> */}
-                    <input id="interim" placeholder="Прогресс распознавания" />
-                    <textarea
-                        id="message"
-                        placeholder="Окончательный результат"
-                    ></textarea>
-                </div>
-                <div id="auto">
-                    <img className="tracktor" src="tracktor.png" />
+                    <div className="buttons">
+                        <img src="menu_icon2.png" className="popupButton" />
+                        <div className="popup">
+                            {!rulesShown && (
+                                <img
+                                    src="popup1.png"
+                                    className="popupButton"
+                                    onClick={onClickRules}
+                                />
+                            )}
+                            {rulesShown && (
+                                <p className="popuptext">
+                                    Buddy, help me call all the animals home!
+                                    <br></br> They only understand German, and I
+                                    don`t speak German. <br></br>If you name the
+                                    animal correctly, it will jump into the
+                                    tractor by itself.
+                                    <p id="close" onClick={clickOnX}>
+                                        X
+                                    </p>
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="speakResult">
+                        <p>You said:</p>
+                        {lastWord && <h1>{lastWord}</h1>}
+                        {guessed && (
+                            <div>
+                                <img className="yesNo" src="yes_icon.png" />
+                                <p>Great!</p>
+                            </div>
+                        )}
+                        {error && <h1>Try again!</h1>}
+                    </div>
+                    <h5>Call all the animals in German</h5>
                 </div>
                 <div id="animals">
                     <div className="animalsWrapper">
                         {offboardedAnimals.map((animal) => (
                             <img key={animal.name} src={animal.img} />
                         ))}
-                        {/* <img src="svin.png" />
-                        <img src="sharf.png" />
-                        <img src="hahn.png" />
-                        <img src="cat.png" />
-                        <img src="ziege3.png" />
-                        <img src="horse.png" />
-                        <img src="kue.png" />
-                        <img src="pig.png" />
-                        <img src="dog.png" />
-                        <img src="mause.png" /> */}
                     </div>
                 </div>
             </section>
@@ -140,9 +212,7 @@ export default function Game1() {
                 id="message"
                 placeholder="Окончательный результат"
             ></textarea>
-            <div className="animalsInTrack">
-                <img className="tracktor" src="tracktor.png" />
-            </div> */}
+            */}
         </>
     );
 }
@@ -156,7 +226,3 @@ export default function Game1() {
 //     }
 // };
 // а если нажать на животное, то тебе скажут его имя.
-
-// SpeechRecognition.onstart (en-US) надо эту функцию, чтобы комп показал, что он слушает ребенка
-
-// Привязать это действие к нажатию кнопки на тракторе
