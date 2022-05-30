@@ -10,6 +10,7 @@ export default function Game1() {
     const [rulesShown, setRulesShown] = useState(false);
     const [guessed, setGuessed] = useState();
     const [error, setError] = useState();
+    const [menu, setMenu] = useState(false);
 
     console.log(animals);
 
@@ -26,6 +27,32 @@ export default function Game1() {
     useEffect(() => {
         console.log("UseEffect runs ");
     }, [onboard]);
+
+    // var utterThis = new SpeechSynthesisUtterance(word);
+    // utterThis.voice = voice;
+    // synth.speak(utterThis);
+    var lang = "de-De";
+    // var supportedVoices = synth.getVoices();
+
+    // var synth = window.speechSynthesis,
+    //     word = document.getElementById("word"),
+    //     voice = "",
+    //     supportedVoices = [];
+
+    // document.getElementById("say").onclick = function () {
+    //     if (0 === supportedVoices.length) {
+    //         var voices = synth.getVoices();
+    //     }
+
+    //     // поиск текущего языке в массиве supportedVoices
+    //     for (var i = 0; i < voices.length; i++) {
+    //         if (lang == voices[i].lang) {
+    //             voice = voices[i];
+    //         }
+    //     }
+
+    // // произношение текста
+    // 
 
     let recognizer = new SpeechRecognition();
     let speechRecognitionList = new SpeechGrammarList();
@@ -52,6 +79,15 @@ export default function Game1() {
 
     recognizer.grammars = speechRecognitionList;
 
+    function onMenuClick() {
+        console.log("CLICKED ON MENU");
+
+        if (menu == false) {
+            setMenu(true);
+        } else {
+            setMenu(false);
+        }
+    }
     function onClickAllListen() {
         setMicrofoneShown(true);
         console.log("Button clicked biatch");
@@ -66,6 +102,30 @@ export default function Game1() {
         setRulesShown(false);
         console.log("Click on X");
     }
+
+    function getAnimal(event) {
+        const animalInGerman = event.target.name;
+        console.log("It is Animal", animalInGerman);
+        var utterThis = new SpeechSynthesisUtterance(animalInGerman);
+        speechSynthesis.speak(utterThis);
+    }
+
+    // function allLevels() {
+    //     document.getElementById("myDropdown").classList.toggle("show");
+    // }
+
+    // window.onclick = function (event) {
+    //     if (!event.target.matches(".dropbtn")) {
+    //         var dropdowns = document.getElementsByClassName("dropdown-content");
+    //         var i;
+    //         for (i = 0; i < dropdowns.length; i++) {
+    //             var openDropdown = dropdowns[i];
+    //             if (openDropdown.classList.contains("show")) {
+    //                 openDropdown.classList.remove("show");
+    //             }
+    //         }
+    //     }
+    // };
 
     recognizer.onresult = function (event) {
         setMicrofoneShown(false);
@@ -157,6 +217,24 @@ export default function Game1() {
                 <div id="nav">
                     <div className="buttons">
                         <img src="menu_icon2.png" className="popupButton" />
+
+                        <div className="dropdown">
+                            <img
+                                src="levels2.png"
+                                className="popupButton"
+                                onClick={onMenuClick}
+                            />
+                            {menu && (
+                                <div
+                                    id="myDropdown"
+                                    className="dropdown-content"
+                                >
+                                    <a href="game1/easy">Easy</a>
+                                    <a href="game1/normal">Normal</a>
+                                    <a href="game1/hard">Hard</a>
+                                </div>
+                            )}
+                        </div>
                         <div className="popup">
                             {!rulesShown && (
                                 <img
@@ -196,7 +274,12 @@ export default function Game1() {
                 <div id="animals">
                     <div className="animalsWrapper">
                         {offboardedAnimals.map((animal) => (
-                            <img key={animal.name} src={animal.img} />
+                            <img
+                                name={animal.name}
+                                key={animal.name}
+                                src={animal.img}
+                                onClick={getAnimal}
+                            />
                         ))}
                     </div>
                 </div>
