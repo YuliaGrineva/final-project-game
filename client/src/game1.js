@@ -1,73 +1,49 @@
 import animalsJson from "./tiere.json";
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
+
 
 export default function Game1() {
     const [animals, setAnimals] = useState(animalsJson);
-    const [onboard, setOnboard] = useState();
+    const [onboard, setOnboard] = useState([]);
     const [microfoneShown, setMicrofoneShown] = useState(false);
     const [lastWord, setLastWord] = useState();
     const [rulesShown, setRulesShown] = useState(false);
     const [guessed, setGuessed] = useState();
     const [error, setError] = useState();
     const [menu, setMenu] = useState(false);
-
-    console.log(animals);
-
-    // const said = useSelector(state =>
-    //     state.said && state.said);
+    const history = useHistory();
+    const [voice, setVoice] = useState({});
+    const [level, setLevel] = useState(2);
 
     const SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
     const SpeechGrammarList =
-        window.SpeechGrammarList || webkitSpeechGrammarList;
-    // const SpeechRecognitionEvent =
-    //     window.SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+        window.SpeechGrammarList || window.webkitSpeechGrammarList;
 
     useEffect(() => {
-        console.log("UseEffect runs ");
+        const win = offboardedAnimals.length === 0;
+
+        if (win) {
+            const resetAnimals = animals.map(
+                (animal) => (animal.onboard = false)
+            );
+            setAnimals(resetAnimals);
+            history.push("/victory");
+        }
     }, [onboard]);
 
-    // var utterThis = new SpeechSynthesisUtterance(word);
-    // utterThis.voice = voice;
-    // synth.speak(utterThis);
-    var lang = "de-De";
-    // var supportedVoices = synth.getVoices();
-
-    // var synth = window.speechSynthesis,
-    //     word = document.getElementById("word"),
-    //     voice = "",
-    //     supportedVoices = [];
-
-    // document.getElementById("say").onclick = function () {
-    //     if (0 === supportedVoices.length) {
-    //         var voices = synth.getVoices();
-    //     }
-
-    //     // поиск текущего языке в массиве supportedVoices
-    //     for (var i = 0; i < voices.length; i++) {
-    //         if (lang == voices[i].lang) {
-    //             voice = voices[i];
-    //         }
-    //     }
-
-    // // произношение текста
-    // 
+    useEffect(() => {
+        const synth = window.speechSynthesis;
+        synth.addEventListener("voiceschanged", () => {
+            const voices = synth.getVoices();
+            setVoice(voices[5]);
+        });
+    }, []);
 
     let recognizer = new SpeechRecognition();
     let speechRecognitionList = new SpeechGrammarList();
-    const tiere = [
-        "Meerschweinchen",
-        "Schaf",
-        "Huhn",
-        "Katze",
-        "Ziege",
-        "Pferd",
-        "Kuh",
-        "Schwein",
-        "Hund",
-        "Maus",
-    ];
+
     const grammar =
         "#JSGF V1.0; grammar tiere; public <tiere> = ' + tiere.join(' | ') + ';";
 
@@ -80,8 +56,6 @@ export default function Game1() {
     recognizer.grammars = speechRecognitionList;
 
     function onMenuClick() {
-        console.log("CLICKED ON MENU");
-
         if (menu == false) {
             setMenu(true);
         } else {
@@ -90,8 +64,11 @@ export default function Game1() {
     }
     function onClickAllListen() {
         setMicrofoneShown(true);
-        console.log("Button clicked biatch");
+
         recognizer.start();
+        setTimeout(() => {
+            setMicrofoneShown(false);
+        }, 6000);
     }
 
     function onClickRules() {
@@ -100,59 +77,38 @@ export default function Game1() {
 
     function clickOnX() {
         setRulesShown(false);
-        console.log("Click on X");
     }
 
     function getAnimal(event) {
         const animalInGerman = event.target.name;
-        console.log("It is Animal", animalInGerman);
         var utterThis = new SpeechSynthesisUtterance(animalInGerman);
+
+        const thisVoice = voice;
+
+        utterThis.voice = thisVoice;
         speechSynthesis.speak(utterThis);
     }
 
-    // function allLevels() {
-    //     document.getElementById("myDropdown").classList.toggle("show");
-    // }
-
-    // window.onclick = function (event) {
-    //     if (!event.target.matches(".dropbtn")) {
-    //         var dropdowns = document.getElementsByClassName("dropdown-content");
-    //         var i;
-    //         for (i = 0; i < dropdowns.length; i++) {
-    //             var openDropdown = dropdowns[i];
-    //             if (openDropdown.classList.contains("show")) {
-    //                 openDropdown.classList.remove("show");
-    //             }
-    //         }
-    //     }
-    // };
-
     recognizer.onresult = function (event) {
         setMicrofoneShown(false);
-        // const interim = event.result[0].transcript;
-        // console.log("Промежуточный результат: ", interim);
+
         const result = event.results[0][0].transcript;
         let erraten = false;
         console.log("richtig erraten", result);
         setLastWord(result);
 
-        for (let i = 0; i < tiere.length; i++) {
-            if (result === tiere[i]) {
+        const newAnimals = animals.map((animal) => {
+            if (animal.name === result) {
+                animal.onboard = true;
                 erraten = true;
                 setGuessed(true);
-                animals.map((animal) => {
-                    if (animal.name === tiere[i]) {
-                        animal.onboard = true;
-                        onboardedAnimals.push(animal);
-                        setOnboard(animal);
-                        console.log("NEW onboarded", onboardedAnimals);
-                        console.log("NEW", animals);
-
-                        setAnimals(animals);
-                    }
-                });
+                setError(false);
+                setOnboard(onboardedAnimals());
             }
-        }
+            return animal;
+        });
+
+        setAnimals(newAnimals);
 
         if (!erraten) {
             console.log("probiere es noch einmal!");
@@ -162,13 +118,12 @@ export default function Game1() {
 
         return animals;
     };
-    console.log("!!!", animals);
 
     function hideMic() {
         setMicrofoneShown(false);
     }
 
-    const offboardedAnimals = animals.filter((animal) => {
+    let offboardedAnimals = animals.filter((animal) => {
         if (animal.onboard === false) {
             return true;
         } else {
@@ -176,14 +131,21 @@ export default function Game1() {
         }
     });
 
-    const onboardedAnimals = animals.filter((animal) => {
-        if (animal.onboard === true) {
-            return true;
-        } else {
-            return false;
-        }
-    });
-    console.log("obboard", onboardedAnimals);
+    console.log(
+        "ofboarded animals",
+        offboardedAnimals[0],
+        offboardedAnimals[1],
+        offboardedAnimals[2]
+    );
+
+    let onboardedAnimals = () =>
+        animals.filter((animal) => {
+            if (animal.onboard === true) {
+                return true;
+            } else {
+                return false;
+            }
+        });
 
     return (
         <>
@@ -199,12 +161,12 @@ export default function Game1() {
                     {microfoneShown && (
                         <div>
                             <img className="listen" src="mic2.png" />
-                            <button onClick={hideMic}>HIDE MIC</button>
+                            {/* <button onClick={hideMic}>HIDE MIC</button> */}
                         </div>
                     )}
 
                     <div id="onTheTractor">
-                        {onboardedAnimals.map((animal) => (
+                        {onboard.map((animal) => (
                             <img
                                 id="onboardAnimals"
                                 key={animal.name}
@@ -226,12 +188,17 @@ export default function Game1() {
                             />
                             {menu && (
                                 <div
-                                    id="myDropdown"
                                     className="dropdown-content"
                                 >
-                                    <a href="game1/easy">Easy</a>
-                                    <a href="game1/normal">Normal</a>
-                                    <a href="game1/hard">Hard</a>
+                                    <button onClick={() => setLevel(0)}>
+                                        Easy
+                                    </button>
+                                    <button onClick={() => setLevel(1)}>
+                                        Normal
+                                    </button>
+                                    <button onClick={() => setLevel(2)}>
+                                        Hard
+                                    </button>
                                 </div>
                             )}
                         </div>
@@ -245,7 +212,7 @@ export default function Game1() {
                             )}
                             {rulesShown && (
                                 <p className="popuptext">
-                                    Buddy, help me call all the animals home!
+                                    Hey bud, help me call all the animals home!
                                     <br></br> They only understand German, and I
                                     don`t speak German. <br></br>If you name the
                                     animal correctly, it will jump into the
@@ -273,39 +240,22 @@ export default function Game1() {
                 </div>
                 <div id="animals">
                     <div className="animalsWrapper">
-                        {offboardedAnimals.map((animal) => (
-                            <img
-                                name={animal.name}
-                                key={animal.name}
-                                src={animal.img}
-                                onClick={getAnimal}
-                            />
-                        ))}
+                        {offboardedAnimals
+                            .filter((animal) => {
+                                console.log("animalllll", animal, level);
+                                return animal.level <= level;
+                            })
+                            .map((animal) => (
+                                <img
+                                    name={animal.name}
+                                    key={animal.name}
+                                    src={animal.img}
+                                    onClick={getAnimal}
+                                />
+                            ))}
                     </div>
                 </div>
             </section>
-            {/* <img className="1" src="1.png" />
-            <p>Call all the animals in German</p>
-
-            <button id="recognize">Start</button>
-
-            <input id="interim" placeholder="Прогресс распознавания" />
-
-            <textarea
-                id="message"
-                placeholder="Окончательный результат"
-            ></textarea>
-            */}
         </>
     );
 }
-
-// recognizer.onresult = function (event) {
-//     var result = event.results[event.resultIndex];
-//     if (result.isFinal) {
-//         alert("Вы сказали: " + result[0].transcript);
-//     } else {
-//         console.log("Промежуточный результат: ", result[0].transcript);
-//     }
-// };
-// а если нажать на животное, то тебе скажут его имя.

@@ -23,17 +23,25 @@ main {
 
 p {
     background-color: rgb(35 97 127);
-    padding: 10px;
-    border-radius: 25px;
+    padding: 15px;
+    border-radius: 15px;
     margin: 10px;
     color: white;
+    font-size: 18px;
+}
+
+.hi {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     height: 100vh;
 }
 
@@ -116,7 +124,12 @@ header {
         left: -50px;
     }
 }
-
+button {
+    padding: 3px;
+    margin: 3px;
+    background-color: #e7bb79;
+    border-radius: 15px;
+}
 .grass {
     height: 93px;
     z-index: 0;
@@ -125,13 +138,14 @@ header {
 }
 
 .ja {
-    height: 60px;
-    width: 50px;
+    height: 70px;
+    width: 60px;
     border-radius: 30%;
     border: 3px solid #113b47;
     padding: 3px;
     transform: rotate(449deg);
     background-color: #45b4e9;
+    margin-top: 20px;
 }
 .playButton {
     height: 60px;
@@ -142,7 +156,8 @@ header {
     transform: rotate(449deg);
     background-color: #45b4e9;
     position: fixed;
-    top: 35px;
+    top: 55px;
+    z-index: 30;
 }
 
 .ja:hover {
@@ -191,7 +206,7 @@ header {
     background-color: #c1edff;
     grid-row: 1 / 3;
     grid-column: 1 / 3;
-    border-right: dotted 9px #2c4e6d;
+    /* border-right: dotted 9px #2c4e6d; */
     padding: 3%;
     display: flex;
     flex-direction: column;
@@ -230,7 +245,7 @@ header {
 #onTheTractor {
     position: relative;
     z-index: 10;
-    bottom: -27%;
+    bottom: -30%;
     max-width: 50%;
     padding: 0;
 }
@@ -242,28 +257,28 @@ header {
 }
 
 .popuptext {
-   
-    width: 50;
-    background-color: rgb(88 85 85 / 80%);
+    background-color: rgb(88 85 85 / 90%);
     border-radius: 25px;
-    padding: 10px;
+    padding: 30px;
     position: absolute;
     top: 55%;
-    z-index: 11;
+    z-index: 111;
     font-size: 22px;
     width: 80vw;
-        display: flex;
+    display: flex;
     flex-direction: row;
     align-items: center;
-      line-height: 2;
+    line-height: 2;
+    justify-content: space-between;
 }
 
 .popuptext p {
-        font-size: 22px;
-  
-    padding: 20px;
+    font-size: 22px;
+    padding: 9px;
     z-index: 12;
     font-weight: bold;
+    width: 5%;
+    text-align: center;
 }
 
 .popupButton {
@@ -273,7 +288,7 @@ header {
     margin: 6px;
     padding: 6px;
     border-radius: 20px;
-    background-color: #a3ffa3;
+    background-color: #7bd776;
 }
 
 .popupButton:hover {
@@ -287,7 +302,7 @@ header {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 3px;
+    padding: 10px;
 }
 
 input {
@@ -300,11 +315,11 @@ h5 {
     margin: 8px;
     background-color: rgb(56 110 136);
     padding: 10px;
-    border-radius: 25px;
+    border-radius: 15px;
     margin: 10px;
     color: #ffffff;
 
-    border-radius: solid 2px blue;
+    border-radius: solid 1px blue;
     border: solid 2px black;
 }
 
@@ -312,21 +327,25 @@ h5 {
     display: flex;
 }
 
-.listen{
-        height: 80px;
+.listen {
+    height: 80px;
     background-color: #edd4cf;
     border: solid 2px rgb(189 122 156);
     border-radius: 25px;
     box-shadow: 0px 0px 10px 3px rgb(147 34 0 / 93%);
     padding: 4px;
-
+        position: fixed;
+    left: 75%;
+    top: 7%;
 }
 
-.speakResult {
-        padding: 10px;
-    border-bottom: solid 5px rgb(35 97 127);
-}
+
 
 .yesNo {
     height: 50px;
+}
+
+.dropdown-content {
+    display: flex;
+    flex-direction: column;
 }

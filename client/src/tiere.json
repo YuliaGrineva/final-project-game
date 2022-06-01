@@ -2,55 +2,66 @@
     {
         "name": "Meerschweinchen",
         "img": "svin.png",
-        "onboard": false
+        "onboard": false,
+        "level": 2
+
     },
     {
         "name": "Schaf",
         "img": "sharf.png",
-        "onboard": false
+        "onboard": false,
+        "level": 2
     },
     {
         "name": "Huhn",
         "img": "hahn.png",
-        "onboard": false
+        "onboard": false,
+        "level": 2
     },
 
     {
         "name": "Katze",
         "img": "cat.png",
-        "onboard": false
+        "onboard": false,
+        "level": 1
     },
     {
         "name": "Ziege",
         "img": "ziege3.png",
-        "onboard": false
+        "onboard": false,
+        "level": 1
     },
 
     {
         "name": "Pferd",
         "img": "horse.png",
-        "onboard": false
+        "onboard": false,
+        "level": 1
     },
     {
-        "name": "Kue",
+        "name": "Kuh",
         "img": "kue.png",
-        "onboard": false
+        "onboard": false,
+        "level": 0
     },
     {
         "name": "Schwein",
         "img": "pig.png",
-        "onboard": false
+        "onboard": false,
+        "level": 0
     },
 
     {
         "name": "Hund",
         "img": "dog.png",
-        "onboard": false
+        "onboard": false,
+        "level": 0
     },
 
     {
         "name": "Maus",
         "img": "mause.png",
-        "onboard": false
+        "onboard": false,
+        "level": 0
     }
 ]

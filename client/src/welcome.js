@@ -5,11 +5,13 @@ export default function Welcome() {
             <img className="wolk" src="wolk.png" />
             <img className="wolk2" src="wolk.png" />
             <img src="kue.png" className="logo" alt="logo" />
-            <p>Hi, Yulia!</p>
-            <p>Möchtest du spielen?</p>
-            <Link to="/game1">
-                <img className="ja" src="go.png" />
-            </Link>
+            <div className="hi">
+                <p>Hi, Buddy!</p>
+                <p>Möchtest du spielen?</p>
+                <Link to="/game1">
+                    <img className="ja" src="go.png" />
+                </Link>
+            </div>
             <div className="welcomeAnimals">
                 <img className="sharf" src="sharf.png" />
                 <img className="baer" src="baer.png" />

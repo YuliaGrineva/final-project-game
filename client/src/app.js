@@ -1,6 +1,7 @@
 import { BrowserRouter, Route } from "react-router-dom";
 import Game1 from "./game1";
 import Welcome from "./welcome";
+import Victory from "./victory";
 
 export default function App() {
     return (
@@ -11,6 +12,9 @@ export default function App() {
                 </Route>
                 <Route exact path="/game1">
                     <Game1 />
+                </Route>
+                <Route exact path="/victory">
+                    <Victory />
                 </Route>
             </BrowserRouter>
         </div>
