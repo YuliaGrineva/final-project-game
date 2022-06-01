@@ -21,7 +21,8 @@ export default function Game1() {
         window.SpeechGrammarList || window.webkitSpeechGrammarList;
 
     useEffect(() => {
-        const win = offboardedAnimals.length === 0;
+        const win = onboard.length === 10;
+        console.log(onboard.length);
 
         if (win) {
             const resetAnimals = animals.map(
@@ -94,13 +95,13 @@ export default function Game1() {
         setMicrofoneShown(false);
 
         const result = event.results[0][0].transcript;
-        let win = false;
+        let right = false;
         setLastWord(result);
 
         const newAnimals = animals.map((animal) => {
-            if (animal.name === result) {
+            if (animal.name === result && animal.level <= level) {
                 animal.onboard = true;
-                win = true;
+                right = true;
                 setGuessed(true);
                 setError(false);
                 setOnboard(onboardedAnimals());
@@ -110,7 +111,7 @@ export default function Game1() {
 
         setAnimals(newAnimals);
 
-        if (!win) {
+        if (!right) {
             setGuessed(false);
             setError(true);
         }
@@ -130,10 +131,9 @@ export default function Game1() {
         }
     });
 
-
     let onboardedAnimals = () =>
         animals.filter((animal) => {
-            if (animal.onboard === true) {
+            if (animal.onboard === true || animal.level > level) {
                 return true;
             } else {
                 return false;
@@ -160,13 +160,17 @@ export default function Game1() {
                     )}
 
                     <div id="onTheTractor">
-                        {onboard.map((animal) => (
-                            <img
-                                id="onboardAnimals"
-                                key={animal.name}
-                                src={animal.img}
-                            />
-                        ))}
+                        {onboard
+                            .filter((animal) => {
+                                return animal.level <= level;
+                            })
+                            .map((animal) => (
+                                <img
+                                    id="onboardAnimals"
+                                    key={animal.name}
+                                    src={animal.img}
+                                />
+                            ))}
                     </div>
                     <img className="tracktor" src="tracktor.png" />
                 </div>
@@ -209,6 +213,10 @@ export default function Game1() {
                                     don`t speak German. <br></br>If you name the
                                     animal correctly, it will jump into the
                                     tractor by itself.
+                                    <img
+                                        className="farmerSmall"
+                                        src="farmer.png"
+                                    />
                                     <p id="close" onClick={clickOnX}>
                                         X
                                     </p>

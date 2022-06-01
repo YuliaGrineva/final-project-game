@@ -3,6 +3,8 @@ import { useEffect } from "react";
 export default function Victory() {
    
     useEffect(() => {
+        const cucaracha = document.getElementById("music");
+        cucaracha.play();
     }, []);
 
     function pauseAudio() {

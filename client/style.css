@@ -181,6 +181,7 @@ button {
     display: flex;
     display: flex;
     flex-direction: column;
+    z-index: 5;
 }
 
 .ja:hover {
@@ -276,7 +277,7 @@ button {
 }
 
 .popuptext {
-    background-color: rgb(88 85 85 / 90%);
+    background-color: rgb(88 85 85 / 95%);
     border-radius: 25px;
     padding: 30px;
     position: absolute;
@@ -481,10 +482,17 @@ h5 {
     position: absolute;
     left: 20%;
     top: 30px;
+     z-index: 0;
 }
 
 .konfetiItem {
     height: 350px;
     width: 500px;
     z-index: 0;
+}
+
+.farmerSmall {
+height: 200px;
+transform: scale(-1, 1);
+margin: 12px;
 }
