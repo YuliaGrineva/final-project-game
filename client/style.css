@@ -156,8 +156,8 @@ button {
     transform: rotate(449deg);
     background-color: #45b4e9;
     position: absolute;
-    top: 100px;
-    left: 50%;
+    top: 25%;
+    left: 30%;
     z-index: 30;
 }
 
@@ -362,8 +362,8 @@ h5 {
 
 .listen {
     position: fixed;
-    left: 50%;
-    top: 10%;
+    left: 28%;
+    top: 25%;
 }
 
 .listenMicro {
