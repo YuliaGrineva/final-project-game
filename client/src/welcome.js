@@ -7,7 +7,7 @@ export default function Welcome() {
             <img src="kue.png" className="logo" alt="logo" />
             <div className="hi">
                 <p>Hi, Buddy!</p>
-                <p>Möchtest du spielen?</p>
+                <p>Would you like to play?</p>
                 <Link to="/game1">
                     <img className="ja" src="go.png" />
                 </Link>

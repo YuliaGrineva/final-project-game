@@ -2,7 +2,6 @@ import animalsJson from "./tiere.json";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 
-
 export default function Game1() {
     const [animals, setAnimals] = useState(animalsJson);
     const [onboard, setOnboard] = useState([]);
@@ -29,7 +28,9 @@ export default function Game1() {
                 (animal) => (animal.onboard = false)
             );
             setAnimals(resetAnimals);
-            history.push("/victory");
+            setTimeout(() => {
+                history.push("/victory");
+            }, 1500);
         }
     }, [onboard]);
 
@@ -93,14 +94,13 @@ export default function Game1() {
         setMicrofoneShown(false);
 
         const result = event.results[0][0].transcript;
-        let erraten = false;
-        console.log("richtig erraten", result);
+        let win = false;
         setLastWord(result);
 
         const newAnimals = animals.map((animal) => {
             if (animal.name === result) {
                 animal.onboard = true;
-                erraten = true;
+                win = true;
                 setGuessed(true);
                 setError(false);
                 setOnboard(onboardedAnimals());
@@ -110,8 +110,7 @@ export default function Game1() {
 
         setAnimals(newAnimals);
 
-        if (!erraten) {
-            console.log("probiere es noch einmal!");
+        if (!win) {
             setGuessed(false);
             setError(true);
         }
@@ -131,12 +130,6 @@ export default function Game1() {
         }
     });
 
-    console.log(
-        "ofboarded animals",
-        offboardedAnimals[0],
-        offboardedAnimals[1],
-        offboardedAnimals[2]
-    );
 
     let onboardedAnimals = () =>
         animals.filter((animal) => {
@@ -158,10 +151,11 @@ export default function Game1() {
                             src="go.png"
                         />
                     )}
+
                     {microfoneShown && (
-                        <div>
-                            <img className="listen" src="mic2.png" />
-                            {/* <button onClick={hideMic}>HIDE MIC</button> */}
+                        <div className="listen">
+                            <img className="listenMicro" src="mic2.png" />
+                            <button onClick={hideMic}>X</button>
                         </div>
                     )}
 
@@ -187,9 +181,7 @@ export default function Game1() {
                                 onClick={onMenuClick}
                             />
                             {menu && (
-                                <div
-                                    className="dropdown-content"
-                                >
+                                <div className="dropdown-content">
                                     <button onClick={() => setLevel(0)}>
                                         Easy
                                     </button>
@@ -234,7 +226,12 @@ export default function Game1() {
                                 <p>Great!</p>
                             </div>
                         )}
-                        {error && <h1>Try again!</h1>}
+                        {error && (
+                            <div>
+                                <img className="yesNo" src="no_icon.png" />
+                                <h1>Try again!</h1>
+                            </div>
+                        )}
                     </div>
                     <h5>Call all the animals in German</h5>
                 </div>
@@ -242,7 +239,6 @@ export default function Game1() {
                     <div className="animalsWrapper">
                         {offboardedAnimals
                             .filter((animal) => {
-                                console.log("animalllll", animal, level);
                                 return animal.level <= level;
                             })
                             .map((animal) => (
