@@ -22,7 +22,6 @@ export default function Game1() {
 
     useEffect(() => {
         const win = onboard.length === 10;
-        console.log(onboard.length);
 
         if (win) {
             const resetAnimals = animals.map(
