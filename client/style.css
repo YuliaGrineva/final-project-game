@@ -37,6 +37,8 @@ p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    top: 45%;
 }
 
 header {
@@ -73,31 +75,32 @@ header {
 .baer {
     width: 200px;
     transform: rotate(-30deg);
-    margin-right: -130px;
-    float: right;
+    position: fixed;
+    right: -123px;
+    bottom: 80px;
 }
 
 .svin {
     width: 150px;
     transform: rotate(30deg);
-    margin-left: -61px;
-    margin-top: -396px;
-    float: left;
+    position: fixed;
+    left: -70px;
+    top: 120px;
 }
 
 .mause {
     width: 150px;
-    margin-left: -59px;
-    margin-top: -66px;
-    float: left;
+    position: fixed;
+    bottom: 300px;
+    left: -60px;
     transform: scale(-1, 1);
 }
 .ziege {
     width: 150px;
     transform: rotate(-35deg);
-    margin-right: -149px;
-    margin-top: -395px;
-    float: right;
+    right: -80px;
+    position: fixed;
+    top: 180px;
 }
 
 .welcomeAnimals {
@@ -105,7 +108,9 @@ header {
 }
 
 .sharf {
-    position: absolute;
+    position: fixed;
+    left: 0px;
+    bottom: 5px;
     width: 110px;
     animation-name: run;
     animation-duration: 50s;
@@ -116,13 +121,13 @@ header {
 }
 @keyframes run {
     0% {
-        left: -50px;
+        left: -150px;
     }
     50% {
         left: 100px;
     }
     100% {
-        left: -50px;
+        left: -150px;
     }
 }
 button {
@@ -135,6 +140,8 @@ button {
     height: 93px;
     z-index: 0;
     width: 100%;
+    bottom: -2px;
+    position: fixed;
 }
 
 .ja {
@@ -223,7 +230,7 @@ button {
 }
 
 #animals img {
-    width: 20%;
+    width: 18%;
 }
 
 #nav {
@@ -251,6 +258,7 @@ button {
 .animalsWrapper {
     max-width: 800px;
     margin: 0 auto;
+    
 }
 
 #onboardAnimals {
@@ -482,7 +490,7 @@ h5 {
     position: absolute;
     left: 20%;
     top: 30px;
-     z-index: 0;
+    z-index: 0;
 }
 
 .konfetiItem {
@@ -492,7 +500,7 @@ h5 {
 }
 
 .farmerSmall {
-height: 200px;
-transform: scale(-1, 1);
-margin: 12px;
+    height: 200px;
+    transform: scale(-1, 1);
+    /* margin: 12px; */
 }
